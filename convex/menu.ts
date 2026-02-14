@@ -78,3 +78,14 @@ export const move = mutation({
     await ctx.db.patch(target._id, { order: current.order });
   },
 });
+
+export const reorder = mutation({
+  args: {
+    orderedIds: v.array(v.id("menuItems")),
+  },
+  handler: async (ctx, args) => {
+    await Promise.all(
+      args.orderedIds.map((id, index) => ctx.db.patch(id, { order: index + 1 }))
+    );
+  },
+});
